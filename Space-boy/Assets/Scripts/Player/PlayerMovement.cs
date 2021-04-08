@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Rigidbody rb;
+
     [Header("Movement Settings")]
     [Range(0, 15)] public float startSpeed = 10f;
-    [Range(0, 15)] public float vDrag = 5f;
-
+    [Range(0, 15)] public float vDrag = 3f;
     [SerializeField] private bool canMove = true;
     private float currentSpeedH;
     private float currentSpeedV;
 
+    [Header("Movement animation settings")]
+    public float maxBank = 30f;
+    private float bankSpeed;
+
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         currentSpeedH = startSpeed;
         currentSpeedV = startSpeed;
     }
@@ -35,10 +41,32 @@ public class PlayerMovement : MonoBehaviour
             currentSpeedV = startSpeed + vDrag;
         }
     
-        //If the user can move, it will move according to the current input given.
         if (canMove)
         {
-            transform.position += new Vector3(Mathf.Sin(Hor * currentSpeedH), 0, Mathf.Sin(Ver * currentSpeedV));
+            //Moves the spaceship according to the given input.
+            rb.transform.position += new Vector3(Mathf.Sin(Hor * currentSpeedH), 0, Mathf.Sin(Ver * currentSpeedV));
+
+            //Rotating/Banking movement.
+            float tilt = 0;
+            if (Hor < 0)           //Bank left.     
+            {
+                tilt = maxBank;
+                bankSpeed = 75;
+            }
+            else if (Hor > 0)       //Bank right.
+            {
+                tilt = -maxBank;
+                bankSpeed = 75;
+            }
+            else                    //Bank horizontal.
+            {
+                tilt = 0;
+                bankSpeed = 150;
+            }
+
+            Quaternion targetPos = Quaternion.identity;
+            targetPos.eulerAngles = new Vector3(0, 0, tilt);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetPos, Mathf.Sin(Time.deltaTime * bankSpeed));
         }
 
 

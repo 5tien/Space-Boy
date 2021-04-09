@@ -12,6 +12,7 @@ public class AI : MonoBehaviour
 
 
     [Header("Path")]
+    [SerializeField] private bool loop = true;
     [SerializeField] private GameObject path;
     [SerializeField] private float lerpAmount = 100;
     [SerializeField] private int currentPathPosition = 0;
@@ -40,6 +41,14 @@ public class AI : MonoBehaviour
 
                 setPath(currentPathPosition);
                 currentPathPosition += 1;
+            }
+            else if (currentPathPosition == childrenAmount)
+            {
+                if (loop == true)
+                {
+                    lerpAmount = 0;
+                    currentPathPosition = 0;
+                }
             }
 
             lerpAmount += 1;

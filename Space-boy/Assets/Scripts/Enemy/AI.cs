@@ -22,7 +22,10 @@ public class AI : MonoBehaviour
 
     void Start()
     {
-        childrenAmount = path.transform.childCount;
+        if (path != null)
+        {
+            childrenAmount = path.transform.childCount;
+        }
     }
 
     void setPath(int pathNumber)
@@ -59,7 +62,10 @@ public class AI : MonoBehaviour
 
     void Update()
     {
-        followPath();
+        if (path != null)
+        {
+            followPath();
+        }
 
         if (shootTime > 0)
         {
@@ -74,5 +80,7 @@ public class AI : MonoBehaviour
             newBullet.tag = "EnemyBullet";
             newBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -(bulletSpeed - bulletSpeed / 5));
         }
+
+        transform.position += new Vector3(0, 0, -Time.deltaTime);
     }
 }

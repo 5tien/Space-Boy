@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
 
@@ -18,14 +18,33 @@ public class PlayerMovement : MonoBehaviour
     public float maxBankVer = 15f;
     private float bankSpeed;
 
-    private void Start()
+    [Header("Bullet Config")]
+    public float CurrentGun = 1;
+    public GameObject bullet;
+    protected float delayTimer;
+
+    [Header("Single shot Settings")]
+    [Range(0, 9)] public float chargeDrag = 9;
+    [Range(0, 2)] public float shootDelaySingle = 0.8f;
+    public float singleBNSpeed = 10;
+    public float singleBNSize = 0.15f;
+    protected float Charge = 0;
+
+    [Header("Machine shot Settings")]
+    [Range(0, 2)] public float shootDelayMachine = 0.1f;
+    public float machineBNSpeed = 10;
+    public float machineBNSize = 0.05f;
+
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
         currentSpeedH = startSpeed;
         currentSpeedV = startSpeed;
+        Debug.Log("Start");
+        delayTimer = shootDelayMachine;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         //Input detection
         float Hor = Input.GetAxis("Horizontal") * Time.deltaTime;

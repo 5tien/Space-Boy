@@ -11,8 +11,47 @@ public class AI : MonoBehaviour
     [SerializeField] private float bulletSpeed = 10;
 
 
+    [Header("Path")]
+    [SerializeField] private GameObject path;
+    [SerializeField] private float lerpAmount = 100;
+    [SerializeField] private int currentPathPosition = 0;
+    [SerializeField] private int childrenAmount;
+    [SerializeField] private Vector3 pos1;
+    [SerializeField] private Transform pos2;
+
+    void Start()
+    {
+        childrenAmount = path.transform.childCount;
+    }
+
+    void setPath(int pathNumber)
+    {
+        pos1 = transform.position;
+        pos2 = path.transform.GetChild(pathNumber);
+    }
+
+    void followPath()
+    {
+        if (childrenAmount > currentPathPosition - 1)
+        {
+            if (lerpAmount / 100 >= 1 && childrenAmount > currentPathPosition)
+            {
+                lerpAmount = 0;
+
+                setPath(currentPathPosition);
+                currentPathPosition += 1;
+            }
+
+            lerpAmount += 1;
+
+            transform.position = Vector3.Lerp(pos1, pos2.position, lerpAmount / 100);
+        }
+    }
+
     void Update()
     {
+        followPath();
+
         if (shootTime > 0)
         {
             shootTime -= Time.deltaTime;

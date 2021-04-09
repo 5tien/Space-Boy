@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeedV;
 
     [Header("Movement animation settings")]
-    public float maxBank = 30f;
+    public float maxBankHor = 27f;
+    public float maxBankVer = 15f;
     private float bankSpeed;
 
     private void Start()
@@ -30,16 +31,7 @@ public class PlayerMovement : MonoBehaviour
         float Hor = Input.GetAxis("Horizontal") * Time.deltaTime;
         float Ver = Input.GetAxis("Vertical") * Time.deltaTime;
 
-        //This implements drag to the spaceship/player. 
-        //The spaceship is flying fast, meaning its harder to go faster and you slow down easier.
-        if (Ver > 0)
-        {
-            currentSpeedV = startSpeed - vDrag;
-        }
-        else if (Ver < 0)
-        {
-            currentSpeedV = startSpeed + vDrag;
-        }
+
     
         if (canMove)
         {
@@ -47,25 +39,44 @@ public class PlayerMovement : MonoBehaviour
             rb.transform.position += new Vector3(Mathf.Sin(Hor * currentSpeedH), 0, Mathf.Sin(Ver * currentSpeedV));
 
             //Rotating/Banking movement.
-            float tilt = 0;
+            float tiltHor = 0;
+            float tiltVer = 0;
+
+            //This implements drag to the spaceship/player. 
+            //The spaceship is flying fast, meaning its harder to go faster and you slow down easier.
+            if (Ver < 0)
+            {
+                tiltVer = maxBankVer;
+                currentSpeedV = startSpeed + vDrag;
+            }
+            else if (Ver > 0)
+            {
+                tiltVer = -maxBankVer;
+                currentSpeedV = startSpeed - vDrag;
+            }
+            else
+            {
+                tiltVer = 0;
+            }
+
             if (Hor < 0)           //Bank left.     
             {
-                tilt = maxBank;
+                tiltHor = maxBankHor;
                 bankSpeed = 75;
             }
             else if (Hor > 0)       //Bank right.
             {
-                tilt = -maxBank;
+                tiltHor = -maxBankHor;
                 bankSpeed = 75;
             }
             else                    //Bank horizontal.
             {
-                tilt = 0;
-                bankSpeed = 150;
+                tiltHor = 0;
+                bankSpeed = 85;
             }
 
             Quaternion targetPos = Quaternion.identity;
-            targetPos.eulerAngles = new Vector3(0, 0, tilt);
+            targetPos.eulerAngles = new Vector3(tiltHor, 270, tiltVer);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetPos, Mathf.Sin(Time.deltaTime * bankSpeed));
         }
 

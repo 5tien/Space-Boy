@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement animation settings")]
     public float maxBankHor = 27f;
-    public float maxBankVer = 15f;
+    public float maxBankVer = 10f;
     private float bankSpeed;
 
     [Header("Bullet Config")]
@@ -24,14 +24,14 @@ public class PlayerController : MonoBehaviour
     protected float delayTimer;
 
     [Header("Single shot Settings")]
-    [Range(0, 9)] public float chargeDrag = 9;
+    [Range(0, 9)] public float chargeDrag = 3;
     [Range(0, 2)] public float shootDelaySingle = 0.8f;
     public float singleBNSpeed = 10;
     public float singleBNSize = 0.15f;
     protected float Charge = 0;
 
     [Header("Machine shot Settings")]
-    [Range(0, 2)] public float shootDelayMachine = 0.1f;
+    [Range(0, 2)] public float shootDelayMachine = 0.2f;
     public float machineBNSpeed = 10;
     public float machineBNSize = 0.05f;
 
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         currentSpeedH = startSpeed;
         currentSpeedV = startSpeed;
         Debug.Log("Start");
-        delayTimer = shootDelayMachine;
+        delayTimer = 0;
     }
 
     protected virtual void Update()

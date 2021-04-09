@@ -61,11 +61,11 @@ public class PlayerMovement : MonoBehaviour
             else                    //Bank horizontal.
             {
                 tilt = 0;
-                bankSpeed = 150;
+                bankSpeed = 100;
             }
 
             Quaternion targetPos = Quaternion.identity;
-            targetPos.eulerAngles = new Vector3(0, 0, tilt);
+            targetPos.eulerAngles = new Vector3(tilt, 270, 0);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetPos, Mathf.Sin(Time.deltaTime * bankSpeed));
         }
 

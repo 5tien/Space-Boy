@@ -12,6 +12,7 @@ public class AI : MonoBehaviour
 
 
     [Header("Path")]
+    [SerializeField] private bool loop = true;
     [SerializeField] private GameObject path;
     [SerializeField] private float lerpAmount = 100;
     [SerializeField] private int currentPathPosition = 0;
@@ -21,7 +22,10 @@ public class AI : MonoBehaviour
 
     void Start()
     {
-        childrenAmount = path.transform.childCount;
+        if (path != null)
+        {
+            childrenAmount = path.transform.childCount;
+        }
     }
 
     void setPath(int pathNumber)
@@ -41,6 +45,14 @@ public class AI : MonoBehaviour
                 setPath(currentPathPosition);
                 currentPathPosition += 1;
             }
+            else if (currentPathPosition == childrenAmount)
+            {
+                if (loop == true)
+                {
+                    lerpAmount = 0;
+                    currentPathPosition = 0;
+                }
+            }
 
             lerpAmount += 1;
 
@@ -50,7 +62,10 @@ public class AI : MonoBehaviour
 
     void Update()
     {
-        followPath();
+        if (path != null)
+        {
+            followPath();
+        }
 
         if (shootTime > 0)
         {
@@ -65,5 +80,7 @@ public class AI : MonoBehaviour
             newBullet.tag = "EnemyBullet";
             newBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -(bulletSpeed - bulletSpeed / 5));
         }
+
+        transform.position += new Vector3(0, 0, -Time.deltaTime);
     }
 }

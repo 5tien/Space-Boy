@@ -13,6 +13,10 @@ public class BulletHit : MonoBehaviour
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
+        else
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), collision.transform.GetComponent<Collider>());
+        }
     }
 
     void Start()
